@@ -1,0 +1,358 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #e0e0e0;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+#app canvas {
+  display: block;
+}
+
+/* ---- HUD root ---- */
+
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  user-select: none;
+}
+
+/* ---- Objective panel (top-left) ---- */
+
+#objective-panel {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 16px 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 210px;
+}
+
+#objective-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+}
+
+#objective-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 14px;
+}
+
+#fracture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fracture-item {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  padding-left: 20px;
+  position: relative;
+  transition: color 0.4s;
+}
+
+.fracture-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  transition: all 0.4s;
+}
+
+.fracture-item.found {
+  color: rgba(100, 255, 180, 0.9);
+}
+
+.fracture-item.found::before {
+  background: rgba(100, 255, 180, 0.8);
+  border-color: rgba(100, 255, 180, 0.8);
+}
+
+/* ---- Inventory panel (top-right) ---- */
+
+#inventory-panel {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 16px 20px;
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 160px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+#inventory-panel.visible {
+  opacity: 1;
+}
+
+#inventory-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 8px;
+}
+
+.inventory-item {
+  font-size: 13px;
+  color: rgba(200, 170, 255, 0.9);
+  padding: 4px 0;
+}
+
+/* ---- Notification (center) ---- */
+
+#notification {
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.72);
+  padding: 20px 44px;
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 520px;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+/* ---- Interaction hint (bottom-center) ---- */
+
+#interaction-hint {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 26px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* ---- Crosshair ---- */
+
+#crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ---- Fade overlay ---- */
+
+#fade-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- World title overlay ---- */
+
+#world-title-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.2s;
+  pointer-events: none;
+}
+
+#world-title {
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+#world-subtitle {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+}
+
+/* ---- Coordinate overlay ---- */
+
+#coordinate-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.2s;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 40px 80px;
+  border-radius: 12px;
+  border: 1px solid rgba(100, 220, 255, 0.3);
+  box-shadow: 0 0 40px rgba(100, 220, 255, 0.1);
+}
+
+#coordinate-text {
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(100, 255, 200, 0.95);
+  text-shadow: 0 0 10px rgba(100, 255, 200, 0.5);
+}
+
+/* ---- Debug panel (bottom-left) ---- */
+
+#debug-panel {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ---- Loading overlay ---- */
+
+#loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 0.8s;
+}
+
+#loading-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#loading-text {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+/* ---- Objective compass indicator ---- */
+
+#objective-compass {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 22px 10px;
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(100, 220, 255, 0.15);
+  opacity: 0;
+  transition: opacity 0.5s, border-color 0.4s;
+  pointer-events: none;
+}
+
+#compass-arrow {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.12s ease-out;
+  filter: drop-shadow(0 0 6px rgba(100, 220, 255, 0.5));
+}
+
+#compass-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(100, 220, 255, 0.9);
+  white-space: nowrap;
+}
+
+#compass-dist {
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}

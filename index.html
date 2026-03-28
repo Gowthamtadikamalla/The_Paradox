@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dream Layers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <div id="hud">
+    <div id="objective-panel">
+      <div id="objective-label">OBJECTIVE</div>
+      <div id="objective-text"></div>
+      <div id="fracture-list">
+        <div class="fracture-item" data-id="mirror">Anomaly Origin</div>
+        <div class="fracture-item" data-id="stairs">Rotating Room</div>
+        <div class="fracture-item" data-id="clock">Clock Courtyard</div>
+      </div>
+    </div>
+
+    <div id="inventory-panel">
+      <div id="inventory-label">INVENTORY</div>
+      <div id="inventory-items"></div>
+    </div>
+
+    <div id="notification"></div>
+    <div id="interaction-hint"></div>
+    <div id="crosshair"></div>
+
+    <div id="debug-panel">
+      <div id="debug-pos">x: 0 &nbsp; y: 0 &nbsp; z: 0</div>
+    </div>
+
+    <div id="fade-overlay"></div>
+
+    <div id="world-title-overlay">
+      <div id="world-title"></div>
+      <div id="world-subtitle"></div>
+    </div>
+
+    <div id="coordinate-overlay">
+      <div id="coordinate-text">The paradox is solved</div>
+    </div>
+
+    <div id="loading-overlay">
+      <div id="loading-text">Loading...</div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
